@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     borderBottomStyle: 'solid',
   },
   tableCol: {
-    width: '25%', // Adjust based on your needs
+    width: '25%', 
     borderRightWidth: 1,
     borderRightColor: '#000000',
     borderRightStyle: 'solid',
-    padding: 5, // For text padding within the cell
+    padding: 5, 
   },
   tableCell: {
     marginTop: 5,
@@ -40,7 +40,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const ExcelDocument = ({ rows }) => (
+interface ExcelDocumentProps {
+  rows: (string | number)[][];  
+}
+
+const ExcelDocument: React.FC<ExcelDocumentProps> = ({ rows }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.table}>
@@ -58,12 +62,12 @@ const ExcelDocument = ({ rows }) => (
   </Document>
 );
 
-const Excel2PDF = () => {
-  const [rows, setRows] = useState([]);
+const Excel2PDF: React.FC = () => {
+  const [rows, setRows] = useState<(string | number)[][]>([]);
   const [pdfObjectUrl, setPdfObjectUrl] = useState<string | null>(null);
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -71,7 +75,7 @@ const Excel2PDF = () => {
         const worksheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[worksheetName];
         const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setRows(data);
+        setRows(data as (string | number)[][]);
       };
       reader.readAsBinaryString(file);
     }
