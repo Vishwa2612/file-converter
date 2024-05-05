@@ -20,22 +20,12 @@ const WordToPDF: React.FC = () => {
   const [pdfDocument, setPdfDocument] = useState<JSX.Element | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (pdfDocument) {
-      const generateBlobUrl = async () => {
-        const { url } = await BlobProvider({ document: pdfDocument });
-        setPdfBlobUrl(url);
-      };
-      generateBlobUrl();
-    }
-  }, [pdfDocument]);
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0];
     if (uploadedFile) {
       setFile(uploadedFile);
       setPdfDocument(null);
-      setPdfBlobUrl(null); 
+      setPdfBlobUrl(null);
     }
   };
 
@@ -87,7 +77,7 @@ const WordToPDF: React.FC = () => {
               Convert to PDF
             </button>
             <button onClick={clearData} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-              Clear PDF
+              Clear
             </button>
           </div>
         )}
@@ -96,9 +86,21 @@ const WordToPDF: React.FC = () => {
             <PDFDownloadLink document={pdfDocument} fileName="converted.pdf" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
               {({ loading }) => (loading ? 'Preparing document...' : 'Download PDF')}
             </PDFDownloadLink>
-            <button onClick={() => pdfBlobUrl && window.open(pdfBlobUrl, '_blank')} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              View PDF
-            </button>
+            <BlobProvider document={pdfDocument}>
+              {({ blob, url }) => {
+                useEffect(() => {
+                  if (url) {
+                    setPdfBlobUrl(url);
+                  }
+                }, [url]);
+
+                return pdfBlobUrl ? (
+                  <button onClick={() => window.open(pdfBlobUrl, '_blank')} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    View PDF
+                  </button>
+                ) : null;
+              }}
+            </BlobProvider>
           </div>
         )}
       </div>
