@@ -16,25 +16,25 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   table: {
-    display: 'table',
-    width: 'auto',
+    margin: 10,
+    flexDirection: 'column',
     borderStyle: 'solid',
     borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
   },
   tableRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000000',
+    borderBottomStyle: 'solid',
   },
   tableCol: {
-    width: '25%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
+    width: '25%', // Adjust based on your needs
+    borderRightWidth: 1,
+    borderRightColor: '#000000',
+    borderRightStyle: 'solid',
+    padding: 5, // For text padding within the cell
   },
   tableCell: {
-    margin: 'auto',
     marginTop: 5,
     marginBottom: 5,
   }
