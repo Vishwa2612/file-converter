@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
 });
 
 interface ExcelDocumentProps {
-  rows: (string | number)[][];  
+  rows: (string | number)[][]; 
 }
 
+// PDF document component
 const ExcelDocument: React.FC<ExcelDocumentProps> = ({ rows }) => (
   <Document>
     <Page size="A4" style={styles.page}>
@@ -71,19 +72,23 @@ const Excel2PDF: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const workbook = XLSX.read(e.target.result, { type: 'binary' });
-        const worksheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[worksheetName];
-        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setRows(data as (string | number)[][]);
+        // Ensure FileReader's result is not null
+        if (e.target?.result) {
+          const workbook = XLSX.read(e.target.result as string, { type: 'binary' });
+          const worksheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[worksheetName];
+          const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          setRows(data as (string | number)[][]);
+        }
       };
       reader.readAsBinaryString(file);
     }
   };
 
   const handleConvertToPDF = () => {
-    const pdfBlob = pdf(ExcelDocument({ rows }));
-    pdfBlob.updateContainer(ExcelDocument({ rows }));
+    const document = ExcelDocument({ rows });
+    const pdfBlob = pdf(); 
+    pdfBlob.updateContainer(document);
     pdfBlob.toBlob().then(blob => {
       const pdfUrl = URL.createObjectURL(blob);
       setPdfObjectUrl(pdfUrl);
