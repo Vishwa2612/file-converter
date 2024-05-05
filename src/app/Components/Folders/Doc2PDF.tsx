@@ -87,7 +87,7 @@ const WordToPDF: React.FC = () => {
               Convert to PDF
             </button>
             <button onClick={clearData} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-              Clear
+              Clear PDF
             </button>
           </div>
         )}
